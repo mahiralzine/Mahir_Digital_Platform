@@ -1,34 +1,56 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { Globe, Moon, Sun, Mail, Phone, MapPin, Briefcase, GraduationCap, Award } from 'lucide-react';
+import { Moon, Sun, Mail, Phone, MapPin, Briefcase, GraduationCap, Award } from 'lucide-react';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
+// إجبار Next.js على جلب البيانات ديناميكياً وليس أثناء البناء
+export const dynamic = 'force-dynamic';
 
 export default function Resume() {
   const [lang, setLang] = useState('ar');
   const [darkMode, setDarkMode] = useState(true);
   const [cv, setCv] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState(null);
 
   useEffect(() => {
     async function fetchCV() {
-      const { data, error } = await supabase.from('cv_data').select('content').single();
-      if (data) setCv(data.content);
-      setLoading(false);
+      try {
+        const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+        const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+
+        if (!supabaseUrl || !supabaseAnonKey) {
+          throw new Error('Supabase keys are missing in Vercel environment variables.');
+        }
+
+        const supabase = createClient(supabaseUrl, supabaseAnonKey);
+        const { data, error } = await supabase.from('cv_data').select('content').single();
+
+        if (error) throw error;
+        if (data) setCv(data.content);
+      } catch (err) {
+        console.error('Fetch Error:', err);
+        setErrorMsg(err.message || 'Error loading CV data');
+      } finally {
+        setLoading(false);
+      }
     }
+
     fetchCV();
   }, []);
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">Loading...</div>;
-  if (!cv) return <div className="min-h-screen flex items-center justify-center bg-gray-900 text-white">Error loading CV data</div>;
+  if (loading) return <div className="min-h-screen flex items-center justify-center bg-slate-950 text-white font-sans">Loading...</div>;
+  if (errorMsg || !cv) return (
+    <div className="min-h-screen flex flex-col items-center justify-center bg-slate-950 text-red-400 p-4 text-center font-sans">
+      <p className="text-xl font-bold mb-2">Error loading CV data</p>
+      <p className="text-sm text-slate-400 max-w-md">{errorMsg}</p>
+    </div>
+  );
 
   const isRtl = lang === 'ar';
 
   return (
-    <div className={`min-h-screen ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'} transition-colors duration-300`} dir={isRtl ? 'rtl' : 'ltr'}>
+    <div className={`min-h-screen ${darkMode ? 'bg-slate-950 text-slate-100' : 'bg-slate-50 text-slate-800'} transition-colors duration-300 font-sans`} dir={isRtl ? 'rtl' : 'ltr'}>
       {/* Header Controls */}
       <header className="max-w-4xl mx-auto p-6 flex justify-between items-center border-b border-slate-700/50">
         <div className="flex gap-2">
