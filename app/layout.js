@@ -1,4 +1,5 @@
-'use client';
+import './globals.css'; // أو المسار الخاص بـ CSS لديك
+
 export const metadata = {
   metadataBase: new URL('https://mahiralzanna.com'),
   title: {
@@ -34,3 +35,11 @@ export const metadata = {
     images: ['/logo.png'],
   },
 };
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="ar">
+      <body>{children}</body>
+    </html>
+  );
+}
