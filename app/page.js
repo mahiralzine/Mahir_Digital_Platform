@@ -75,38 +75,36 @@ export default function Resume() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto p-6 space-y-12">
-        {/* Profile Info & Avatar */}
         <section className="text-center space-y-4">
           <div className="flex justify-center mb-4">
             <img 
               src="/profile.png" 
-              alt={cv.personal_info.full_name[lang]} 
+              alt={cv.personal_info?.full_name?.[lang] || 'Profile'} 
               className="w-28 h-28 rounded-full border-2 border-blue-500/50 object-cover shadow-lg shadow-blue-500/10"
               onError={(e) => { e.target.style.display = 'none'; }}
             />
           </div>
-          <h1 className="text-4xl font-bold tracking-tight text-blue-500">{cv.personal_info.full_name[lang]}</h1>
-          <p className="text-xl font-medium text-slate-400">{cv.personal_info.title[lang]}</p>
-          <p className="max-w-2xl mx-auto text-slate-300 leading-relaxed">{cv.personal_info.about[lang]}</p>
+          <h1 className="text-4xl font-bold tracking-tight text-blue-500">{cv.personal_info?.full_name?.[lang]}</h1>
+          <p className="text-xl font-medium text-slate-400">{cv.personal_info?.title?.[lang]}</p>
+          <p className="max-w-2xl mx-auto text-slate-300 leading-relaxed">{cv.personal_info?.about?.[lang]}</p>
 
           <div className="flex flex-wrap justify-center gap-6 pt-4 text-sm text-slate-400">
-            <span className="flex items-center gap-2"><Mail size={16} /> {cv.personal_info.contact.email}</span>
-            <span className="flex items-center gap-2"><Phone size={16} /> {cv.personal_info.contact.phone}</span>
-            <span className="flex items-center gap-2"><MapPin size={16} /> {cv.personal_info.contact.location}</span>
+            <span className="flex items-center gap-2"><Mail size={16} /> {cv.personal_info?.contact?.email}</span>
+            <span className="flex items-center gap-2"><Phone size={16} /> {cv.personal_info?.contact?.phone}</span>
+            <span className="flex items-center gap-2"><MapPin size={16} /> {cv.personal_info?.contact?.location}</span>
           </div>
         </section>
 
-        {/* Filterable Experience Section */}
-        <ExperienceSection experiences={cv.experiences} lang={lang} />
+        {/* Experience Component */}
+        <ExperienceSection experiences={cv.experiences} />
 
         {/* Education & Skills */}
         <div className="grid md:grid-cols-2 gap-8">
-          {/* Education */}
           <section className="space-y-4">
             <h2 className="text-2xl font-bold flex items-center gap-2 border-b border-slate-700/50 pb-2 text-blue-400">
               <GraduationCap size={22} /> {lang === 'ar' ? 'التعليم' : lang === 'tr' ? 'Eğitim' : 'Education'}
             </h2>
-            {cv.education.map((edu, idx) => (
+            {cv.education?.map((edu, idx) => (
               <div key={idx} className="p-4 rounded-xl bg-slate-900/50 border border-slate-800">
                 <h3 className="font-bold text-slate-200">{edu.degree[lang]}</h3>
                 <p className="text-sm text-slate-400">{edu.institution} ({edu.year})</p>
@@ -114,13 +112,12 @@ export default function Resume() {
             ))}
           </section>
 
-          {/* Skills */}
           <section className="space-y-4">
             <h2 className="text-2xl font-bold flex items-center gap-2 border-b border-slate-700/50 pb-2 text-blue-400">
               <Award size={22} /> {lang === 'ar' ? 'المهارات' : lang === 'tr' ? 'Beceriler' : 'Skills'}
             </h2>
             <div className="flex flex-wrap gap-2">
-              {cv.skills.map((skill, idx) => (
+              {cv.skills?.map((skill, idx) => (
                 <span key={idx} className="bg-slate-800 text-slate-300 text-sm px-3 py-1 rounded-lg border border-slate-700">
                   {skill[lang]}
                 </span>
