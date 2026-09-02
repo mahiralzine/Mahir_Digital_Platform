@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { Moon, Sun, Mail, Phone, MapPin, Briefcase, GraduationCap, Award } from 'lucide-react';
+import ExperienceSection from '@/components/ExperienceSection';
 
 // إجبار Next.js على جلب البيانات ديناميكياً وليس أثناء البناء
 export const dynamic = 'force-dynamic';
