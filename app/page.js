@@ -1,11 +1,9 @@
 'use client';
+
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
-import { Moon, Sun, Mail, Phone, MapPin, Briefcase, GraduationCap, Award } from 'lucide-react';
+import { Moon, Sun, Mail, Phone, MapPin, GraduationCap, Award } from 'lucide-react';
 import ExperienceSection from '@/components/ExperienceSection';
-
-// إجبار Next.js على جلب البيانات ديناميكياً وليس أثناء البناء
-export const dynamic = 'force-dynamic';
 
 export default function Resume() {
   const [lang, setLang] = useState('ar');
@@ -77,8 +75,16 @@ export default function Resume() {
 
       {/* Main Content */}
       <main className="max-w-4xl mx-auto p-6 space-y-12">
-        {/* Profile Info */}
+        {/* Profile Info & Avatar */}
         <section className="text-center space-y-4">
+          <div className="flex justify-center mb-4">
+            <img 
+              src="/profile.png" 
+              alt={cv.personal_info.full_name[lang]} 
+              className="w-28 h-28 rounded-full border-2 border-blue-500/50 object-cover shadow-lg shadow-blue-500/10"
+              onError={(e) => { e.target.style.display = 'none'; }}
+            />
+          </div>
           <h1 className="text-4xl font-bold tracking-tight text-blue-500">{cv.personal_info.full_name[lang]}</h1>
           <p className="text-xl font-medium text-slate-400">{cv.personal_info.title[lang]}</p>
           <p className="max-w-2xl mx-auto text-slate-300 leading-relaxed">{cv.personal_info.about[lang]}</p>
@@ -90,28 +96,8 @@ export default function Resume() {
           </div>
         </section>
 
-        {/* Experience */}
-        <section className="space-y-6">
-          <h2 className="text-2xl font-bold flex items-center gap-2 border-b border-slate-700/50 pb-2 text-blue-400">
-            <Briefcase size={22} /> {lang === 'ar' ? 'الخبرات المهنية' : lang === 'tr' ? 'İş Deneyimi' : 'Experience'}
-          </h2>
-          <div className="space-y-6">
-            {cv.experiences.map((exp, idx) => (
-              <div key={idx} className="p-5 rounded-xl bg-slate-900/50 border border-slate-800 space-y-2">
-                <div className="flex justify-between items-start flex-wrap gap-2">
-                  <h3 className="font-bold text-lg text-slate-200">{exp.role[lang]}</h3>
-                  <span className="text-xs bg-blue-950 text-blue-400 px-3 py-1 rounded-full">{exp.period}</span>
-                </div>
-                <p className="text-sm text-blue-400/80 font-medium">{exp.company}</p>
-                <ul className="list-disc list-inside text-sm text-slate-300 space-y-1 pt-2">
-                  {exp.details[lang].map((detail, i) => (
-                    <li key={i}>{detail}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </section>
+        {/* Filterable Experience Section */}
+        <ExperienceSection experiences={cv.experiences} lang={lang} />
 
         {/* Education & Skills */}
         <div className="grid md:grid-cols-2 gap-8">
