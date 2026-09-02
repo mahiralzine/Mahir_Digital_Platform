@@ -1,3 +1,4 @@
+'use client';
 export const metadata = {
   metadataBase: new URL('https://mahiralzanna.com'),
   title: {
