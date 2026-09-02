@@ -10,10 +10,10 @@ const CATEGORIES = [
   { id: 'tech', label: 'الأنظمة والحلول / Tech Solutions' },
 ];
 
-export default function ExperienceSection({ experiences }) {
+export default function ExperienceSection({ experiences = [] }) {
   const [activeFilter, setActiveFilter] = useState('all');
 
-  const filteredExperiences = experiences.filter((exp) => {
+  const filteredExperiences = (experiences || []).filter((exp) => {
     if (activeFilter === 'all') return true;
     return exp.tags && exp.tags.includes(activeFilter);
   });
@@ -25,7 +25,6 @@ export default function ExperienceSection({ experiences }) {
           الخبرات المهنية والإنجازات
         </h2>
 
-        {/* فلاتر التخصص التفاعلية */}
         <div className="flex flex-wrap justify-center gap-3 mb-10">
           {CATEGORIES.map((cat) => (
             <button
@@ -42,7 +41,6 @@ export default function ExperienceSection({ experiences }) {
           ))}
         </div>
 
-        {/* قائمة الخبرات المفلترة */}
         <div className="space-y-6 max-w-4xl mx-auto">
           {filteredExperiences.map((exp, idx) => (
             <div
@@ -63,7 +61,6 @@ export default function ExperienceSection({ experiences }) {
                 {exp.description}
               </p>
 
-              {/* وسم الإنجاز والمجال الفعلي */}
               {exp.achievements && (
                 <div className="mt-4 pt-3 border-t border-slate-700/60">
                   <span className="text-xs text-blue-300 font-semibold block mb-1">
