@@ -1,4 +1,4 @@
-import './globals.css'; // أو المسار الخاص بـ CSS لديك
+import './globals.css';
 
 export const metadata = {
   metadataBase: new URL('https://mahiralzanna.com'),
