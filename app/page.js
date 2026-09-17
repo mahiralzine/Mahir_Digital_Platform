@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { createClient } from '@supabase/supabase-js';
 import { Moon, Sun, Mail, Phone, MapPin, GraduationCap, Award } from 'lucide-react';
-import ExperienceSection from '@/components/ExperienceSection';
+import ExperienceSection from '@src/components/ExperienceSection';
 
 export default function Resume() {
   const [lang, setLang] = useState('ar');
